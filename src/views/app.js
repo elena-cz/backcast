@@ -3,16 +3,32 @@ var AppView = Backbone.View.extend({
   el: '#app',
 
   initialize: function() {
+    
     this.videos = new Videos(window.exampleVideoData);
+    
     this.render();
-    this.videoPlayerView = new VideoPlayerView({model: Video});
-    this.videoPlayerView.render();
+    
+    this.currentVideo = this.videos.models[0];//initialize current video to be 0
+    
+    this.videoPlayerView = new VideoPlayerView({
+      el: this.$('.player'),
+      collection: this.videos
+    });
+    this.videoPlayerView.render(this.currentVideo);
+    
     this.videoListView = new VideoListView({
       el: this.$('.list'),
       collection: this.videos
     });
     this.videoListView.render();
+    
+    // Backbone.on('select', this.updateVideo, this);
+    
+    // this.listenTo(this.videos, 'select', this.updateVideo(this));
+    
+    this.videos.on('select', this.updateVideo, this);
   },
+ 
 
 
   render: function() {
@@ -20,7 +36,12 @@ var AppView = Backbone.View.extend({
     return this;
   },
 
-  template: templateURL('src/templates/app.html')
+  template: templateURL('src/templates/app.html'),
+  
+  updateVideo: function(video) {
+    this.currentVideo = video;
+    this.videoPlayerView.render(this.currentVideo);
+  }
 
 });
 
