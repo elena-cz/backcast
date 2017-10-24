@@ -6,7 +6,7 @@ var VideoListEntryView = Backbone.View.extend({
     this.$el.html(this.template(this.model.attributes));
     console.log(this, 'return this');
 
-    return this;
+    return this.$el;
   },
 
   template: templateURL('src/templates/videoListEntry.html')
