@@ -10,6 +10,11 @@ var AppView = Backbone.View.extend({
     
     this.currentVideo = this.videos.models[0];//initialize current video to be 0
     
+    this.searchView = new SearchView({
+      el: this.$('.search')
+    });
+    this.searchView.render();
+    
     this.videoPlayerView = new VideoPlayerView({
       el: this.$('.player'),
       collection: this.videos
@@ -21,10 +26,7 @@ var AppView = Backbone.View.extend({
       collection: this.videos
     });
     this.videoListView.render();
-    
-    // Backbone.on('select', this.updateVideo, this);
-    
-    // this.listenTo(this.videos, 'select', this.updateVideo(this));
+  
     
     this.videos.on('select', this.updateVideo, this);
   },
