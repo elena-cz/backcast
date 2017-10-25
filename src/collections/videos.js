@@ -3,30 +3,37 @@ var Videos = Backbone.Collection.extend({
   
   
   model: Video,
+
   
   initialize: function() {
-    this.search('surfing');
+
+    // this.reset(window.exampleVideoData);
+    this.search('dog');
   },
   
-  
+  resetVideos: function(data) {
+    console.log(data);
+    this.reset(data.items);
+    console.log(this, 'this');
+  },
 
   
   search: function(query) {
+    
+    var that = this;
 
     $.ajax({
       method: 'GET',
-      url: `https://www.googleapis.com/youtube/v3/search?&key=${window.YOUTUBE_API_KEY}&q=${query}&fields=items(snippet(title))&part=snippet`,
+      url: `https://www.googleapis.com/youtube/v3/search?&key=${window.YOUTUBE_API_KEY}&q=${query}&part=snippet`,
       maxResults: 5,
       part: 'snippet',
       success: function(data) {
-        console.log(data);
+        console.log(that, 'that');
+        that.resetVideos(data);
       },
       fail: function(data) {
         console.log('err!');
-      }     
-      
-      // 'https://www.googleapis.com/youtube/v3/search?&key=' + YOUTUBE_API_KEY + '&q=surfing' + '&fields=items(snippet(title))'+ '&part=snippet",
-      
+      }           
     });
     
     
@@ -34,10 +41,3 @@ var Videos = Backbone.Collection.extend({
 
 });
 
-
-// In collections/videos.js, create a search function to fetch data from YouTube's API.
-// The ajax method should receive a data object with the following properties:
-// query - the string to search for
-// maxResults - the maximum number of videos to get, which should default to 5
-// key - an authorized YouTube Browser API key
-// Only fetch embeddable videos
